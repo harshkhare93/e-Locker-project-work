@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg2"
+    tools:context="harshkhare.e_locker.LoginMainActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="cursive"
+        android:text="e-Locker"
+        android:textAlignment="textStart"
+        android:textColor="@android:color/holo_orange_dark"
+        android:textSize="50sp"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="210dp"
+        tools:layout_editor_absoluteY="68dp"
+        android:layout_marginTop="161dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/textView3"
+        android:layout_marginEnd="62dp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed"
+        android:text="Lock your Personal Documents"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textColor="?android:attr/colorControlActivated"
+        android:textSize="25sp"
+        android:textStyle="bold|italic"
+        android:layout_marginTop="7dp"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:fontFamily="cursive"
+        android:text="Login with Social Media"
+        android:textAlignment="textEnd"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_marginStart="8dp"
+        android:layout_below="@+id/textView3"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/btng"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:background="@color/colorAccent"
+        android:elevation="8dp"
+        android:fontFamily="sans-serif"
+        android:text=" Google +"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_below="@+id/textView4"
+        android:layout_alignStart="@+id/textView3" />
+
+
+</RelativeLayout>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_camera"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Scan Documents" />
+        <item
+            android:id="@+id/nav_upload"
+            android:icon="@android:drawable/ic_menu_upload"
+            android:title="Uploaded Documents" />
+        <item
+            android:id="@+id/nav_download"
+            android:icon="@android:drawable/stat_sys_download_done"
+            android:title="Download Documents" />
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_account_circle_black_24dp"
+            android:title="Profile" />
+    </group>
+
+    <item
+        android:id="@+id/nav_about"
+        android:icon="@android:drawable/checkbox_on_background"
+        android:title="About" />
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Developer" />
+        </menu>
+    </item>
+
+</menu>
