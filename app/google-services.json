@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "778865015220",
+    "firebase_url": "https://e-locker.firebaseio.com",
+    "project_id": "e-locker",
+    "storage_bucket": "e-locker.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:778865015220:android:73c1425d79b5c8d0",
+        "android_client_info": {
+          "package_name": "harshkhare.e_locker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "778865015220-soe1d7bcb2jruffsdrevurkcmg704fig.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "harshkhare.e_locker",
+            "certificate_hash": "b7475dadf764f92f142ecae564ec5e8a4622baa1"
+          }
+        },
+        {
+          "client_id": "778865015220-qt3ftkseora7o7si9it5meae53v35rri.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCn-KM55tJbCGN620BcH0D1OZeutkl-9Ag"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "778865015220-qt3ftkseora7o7si9it5meae53v35rri.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

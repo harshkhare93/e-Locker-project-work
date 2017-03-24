@@ -19,7 +19,7 @@
         android:layout_height="57dp"
         android:layout_weight="0.26"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@drawable/userprofile" />
+        />
 
     <TextView
         android:layout_width="match_parent"
