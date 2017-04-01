@@ -9,11 +9,11 @@
             android:title="Scan Documents" />
         <item
             android:id="@+id/nav_upload"
-            android:icon="@android:drawable/ic_menu_upload"
+            android:icon="@drawable/ic_cloud_upload_black_24dp"
             android:title="Uploaded Documents" />
         <item
             android:id="@+id/nav_download"
-            android:icon="@android:drawable/stat_sys_download_done"
+            android:icon="@drawable/ic_cloud_download_black_24dp"
             android:title="Download Documents" />
         <item
             android:id="@+id/nav_profile"
@@ -23,8 +23,12 @@
 
     <item
         android:id="@+id/nav_about"
-        android:icon="@android:drawable/checkbox_on_background"
+        android:icon="@drawable/ic_announcement_black_24dp"
         android:title="About" />
+    <item
+        android:id="@+id/nav_logout"
+        android:icon="@drawable/ic_settings_power_black_24dp"
+        android:title="Logout" />
     <item android:title="Communicate">
         <menu>
             <item
@@ -32,9 +36,9 @@
                 android:icon="@drawable/ic_menu_share"
                 android:title="Share" />
             <item
-                android:id="@+id/nav_send"
+                android:id="@+id/nav_feedback"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Developer" />
+                android:title="Feedbacks" />
         </menu>
     </item>
 

@@ -14,8 +14,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class Home extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import static android.R.attr.id;
+
+public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,16 +24,6 @@ public class Home extends AppCompatActivity
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -41,6 +32,7 @@ public class Home extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
     }
 
     @Override
@@ -79,39 +71,65 @@ public class Home extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        switch (item.getItemId()) {
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        }
-        else if (id == R.id.nav_camera) {
+            case R.id.nav_camera:
+               // todo Handle the camera action
+                break;
+            case R.id.nav_upload:
+                //todo upload documents
+                break;
 
-        }
-        else if (id == R.id.nav_upload) {
+            case R.id.nav_download:
+                // TODO users download documents
+                break;
 
-        }
-        else if (id == R.id.nav_download) {
+            case R.id.nav_profile:
+                //// TODO: get users profile info.
 
-        }
-        else if (id == R.id.nav_profile) {
+                Intent profileinfo=new Intent(Home.this,GetProfileInformationActivity.class);
+                startActivity(profileinfo);
 
-        }
-        else if (id == R.id.nav_about) {
-            Intent i=new Intent(Home.this , AboutActivity.class);
-            startActivity(i);
-        }
-        else if (id == R.id.nav_share) {
+                break;
 
-        }
-        else if (id == R.id.nav_send) {
+            case R.id.nav_about:
+                //TODO shows about app information
+                Intent about = new Intent(Home.this, AboutActivity.class);
+                startActivity(about);
+                break;
+            case R.id.nav_share:
+                //// TODO: shareApp
+                break;
 
-        }
-        else if (id == R.id.action_settings) {
+            case R.id.nav_feedback:
+                //// TODO: send feedback
+                Intent emailIntent= new Intent(Intent.ACTION_SEND);
+                emailIntent.setType("text/plain");
 
-        }
-        else if (id == R.id.action_logout) {
+                startActivity(Intent.createChooser(emailIntent,"Send your email in:"));
+               /* String aEmailList[] = { "user1@host.com","user2@host.com" };
+                String aEmailCCList[] = { "user3@host.com","user4@host.com"};
+                String aEmailBCCList[] = { "user5@host.com" };
+
+                emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, aEmailList);
+                emailIntent.putExtra(android.content.Intent.EXTRA_CC, aEmailCCList);
+                emailIntent.putExtra(android.content.Intent.EXTRA_BCC, aEmailBCCList);
+                emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "My subject");
+                emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "My message body.");
+                emailIntent.setType("plain/text");
+                startActivity(emailIntent);*/
+                break;
+
+            case R.id.action_settings:
+                //// TODO: Reminder settings
+                break;
+
+            case R.id.nav_logout:
+                //// TODO: user logout
                 finish();
+                break;
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

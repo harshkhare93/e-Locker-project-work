@@ -44,7 +44,7 @@ public class LoginMainActivity extends AppCompatActivity implements View.OnClick
     private GoogleApiClient mGoogleApiClient;
     private LoginButton loginButton;
     private CallbackManager mCallbackManager;
-    
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +79,7 @@ public class LoginMainActivity extends AppCompatActivity implements View.OnClick
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
+                
                 // ...
             }
         };
