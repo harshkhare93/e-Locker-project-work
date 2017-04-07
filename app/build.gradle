@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "harshkhare.e_locker"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -33,9 +33,11 @@ dependencies {
     compile 'com.google.android.gms:play-services-auth:10.0.1'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.github.medyo:fancybuttons:1.8.3'
-    compile "com.squareup.picasso:picasso:2.5.2"
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.google.android.gms:play-services-vision:10.0.1'
     testCompile 'junit:junit:4.12'
 }
+
 
 
 

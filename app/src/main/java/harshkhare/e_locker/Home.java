@@ -2,9 +2,7 @@ package harshkhare.e_locker;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
+
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+
 
 import static android.R.attr.id;
 
@@ -75,6 +75,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
             case R.id.nav_camera:
                // todo Handle the camera action
+                Intent camera=new Intent(Home.this,Scanning_OCR.class);
+                startActivity(camera);
                 break;
             case R.id.nav_upload:
                 //todo upload documents
