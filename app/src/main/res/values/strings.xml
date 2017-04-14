@@ -34,4 +34,6 @@
     <string name="no_email_client_error">There are no email clients installed.</string>
     <string name="copy_text">Copy to clipboard</string>
     <string name="clipboard_copy_successful_message">Copied to clipboard.</string>
+
+    <string name="title_activity_feedback_rateus">Feedback And Rate Us</string>
 </resources>

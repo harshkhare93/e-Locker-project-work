@@ -3,6 +3,7 @@ package harshkhare.e_locker;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -11,12 +12,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-
+import android.view.View;
 
 
 import static android.R.attr.id;
+import static harshkhare.e_locker.R.id.nav_logout;
 
-public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+
+    private MenuItem logout;
+    private FloatingActionButton fabscandoc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +34,11 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        logout = (MenuItem) findViewById(R.id.nav_logout);
+        fabscandoc = (FloatingActionButton) findViewById(R.id.fabScandoc);
+        fabscandoc.setOnClickListener(this);
     }
 
     @Override
@@ -103,31 +109,27 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 //// TODO: shareApp
                 break;
 
-            case R.id.nav_feedback:
-                //// TODO: send feedback
+            case R.id.nav_developer:
+                //// TODO: send email direct Developer
                 Intent emailIntent= new Intent(Intent.ACTION_SEND);
                 emailIntent.setType("text/plain");
+                break;
 
-                startActivity(Intent.createChooser(emailIntent,"Send your email in:"));
-               /* String aEmailList[] = { "user1@host.com","user2@host.com" };
-                String aEmailCCList[] = { "user3@host.com","user4@host.com"};
-                String aEmailBCCList[] = { "user5@host.com" };
-
-                emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, aEmailList);
-                emailIntent.putExtra(android.content.Intent.EXTRA_CC, aEmailCCList);
-                emailIntent.putExtra(android.content.Intent.EXTRA_BCC, aEmailBCCList);
-                emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "My subject");
-                emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "My message body.");
-                emailIntent.setType("plain/text");
-                startActivity(emailIntent);*/
+            case R.id.nav_feed_rate:
+                //Todo feedback and Rate app
+                Intent feedbackrate=new Intent(this,FeedbackRateus.class);
+                startActivity(feedbackrate);
                 break;
 
             case R.id.action_settings:
                 //// TODO: Reminder settings
+
+
                 break;
 
-            case R.id.nav_logout:
+            case nav_logout:
                 //// TODO: user logout
+
                 finish();
                 break;
         }
@@ -136,5 +138,11 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent i =new Intent(this,Scanning_OCR.class);
+        startActivity(i);
     }
 }

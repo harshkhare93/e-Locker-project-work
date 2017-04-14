@@ -17,46 +17,157 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.Text;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 
-
-
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class Scanning_OCR extends AppCompatActivity {
     private static final String LOG_TAG = "Text API";
     private static final int PHOTO_REQUEST = 10;
-    private TextView scanResults;
+    public static final String TAG = "Scanning_OCR";
+
     private Uri imageUri;
     private TextRecognizer detector;
     private static final int REQUEST_WRITE_PERMISSION = 20;
     private static final String SAVED_INSTANCE_URI = "uri";
     private static final String SAVED_INSTANCE_RESULT = "result";
+    private ImageView ivScanDoc;
+
+    private FirebaseStorage storage;
+    private StorageReference storageRef;
+    private StorageReference imagesRef;
+    private Uri downloadUrl;
+    private FirebaseDatabase db;
+    private FirebaseDatabase scannedtextref;
+    private DatabaseReference scantextresult;
+    private EditText etscanResults;
+    private ProgressBar pbStatus;
+    private TextView tvUploadStatus;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanning__ocr);
-        Button button = (Button) findViewById(R.id.button);
-        scanResults = (TextView) findViewById(R.id.results);
+        Button btnUpload = (Button) findViewById(R.id.btnUpload);
+        Button btnScan = (Button) findViewById(R.id.btnScan);
+        ivScanDoc = (ImageView) findViewById(R.id.ivScanDoc);
+        etscanResults = (EditText) findViewById(R.id.etscanResults);
+        storage = FirebaseStorage.getInstance();
+        db = FirebaseDatabase.getInstance();
+        FirebaseStorage fbstorage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
+        imagesRef = storageRef.child("images");
+        scantextresult = db.getReference();
+
+        pbStatus = (ProgressBar) findViewById(R.id.pbStatus);
+        pbStatus.setVisibility(View.GONE);
+
+        tvUploadStatus = (TextView) findViewById(R.id.tvUploadStatus);
         if (savedInstanceState != null) {
             imageUri = Uri.parse(savedInstanceState.getString(SAVED_INSTANCE_URI));
-            scanResults.setText(savedInstanceState.getString(SAVED_INSTANCE_RESULT));
+            etscanResults.setText(savedInstanceState.getString(SAVED_INSTANCE_RESULT));
         }
         detector = new TextRecognizer.Builder(getApplicationContext()).build();
-        button.setOnClickListener(new View.OnClickListener() {
+        btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ActivityCompat.requestPermissions(Scanning_OCR.this, new
                         String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
+            }
+        });
+        btnUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadToFirebase(v);
+            }
+        });
+    }
+
+    private void uploadToFirebase(final View v) {
+        v.setEnabled(false);
+        pbStatus.setVisibility(View.VISIBLE);
+        ivScanDoc.setDrawingCacheEnabled(true);
+        ivScanDoc.buildDrawingCache();
+        Bitmap bitmap = ivScanDoc.getDrawingCache();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+        // Date currentDate = new Date(System.currentTimeMillis());
+        //String date=currentDate.toString();
+
+        StorageReference docs = FirebaseStorage.getInstance().getReference("docs");
+        UploadTask uploadTask = docs.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(Scanning_OCR.this, "Failed to upload", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                @SuppressWarnings("VisibleForTests")
+                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                DatabaseReference databaseReference = db.getReference("docs_db");
+                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                String uid = currentUser.getUid();
+                String username = currentUser.getDisplayName();
+                HashMap<String, Object> data = new HashMap<>();
+                data.put("url", downloadUrl);
+                data.put("user", username);
+                data.put("uploaded_on", System.currentTimeMillis());
+                String text = etscanResults.getText().toString();
+                if (text.isEmpty()) {
+                    text = "No extra info";
+                }
+                data.put("desc", text);
+                databaseReference.child(uid).setValue(data, new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                        if (databaseError == null) {
+                            pbStatus.setVisibility(View.GONE);
+                            Toast.makeText(Scanning_OCR.this, "Upload successful", Toast.LENGTH_SHORT).show();
+                        }
+                        v.setEnabled(true);
+                    }
+                });
+            }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                @SuppressWarnings("VisibleForTests")
+                long totalByteCount = taskSnapshot.getTotalByteCount();
+                @SuppressWarnings("VisibleForTests")
+                long transferred = taskSnapshot.getBytesTransferred();
+                tvUploadStatus.setText(transferred + "/" + totalByteCount);
             }
         });
     }
@@ -86,6 +197,7 @@ public class Scanning_OCR extends AppCompatActivity {
                     String blocks = "";
                     String lines = "";
                     String words = "";
+                    ivScanDoc.setImageBitmap(bitmap);
                     for (int index = 0; index < textBlocks.size(); index++) {
                         //extract scanned text blocks here
                         TextBlock tBlock = textBlocks.valueAt(index);
@@ -99,21 +211,14 @@ public class Scanning_OCR extends AppCompatActivity {
                             }
                         }
                     }
+
                     if (textBlocks.size() == 0) {
-                        scanResults.setText("Scan Failed: Found nothing to scan");
+                        etscanResults.setText("");
                     } else {
-                        scanResults.setText(scanResults.getText() + "Blocks: " + "\n");
-                        scanResults.setText(scanResults.getText() + blocks + "\n");
-                        scanResults.setText(scanResults.getText() + "---------" + "\n");
-                        scanResults.setText(scanResults.getText() + "Lines: " + "\n");
-                        scanResults.setText(scanResults.getText() + lines + "\n");
-                        scanResults.setText(scanResults.getText() + "---------" + "\n");
-                        scanResults.setText(scanResults.getText() + "Words: " + "\n");
-                        scanResults.setText(scanResults.getText() + words + "\n");
-                        scanResults.setText(scanResults.getText() + "---------" + "\n");
+                        etscanResults.setText(etscanResults.getText() + words + "\n");
                     }
                 } else {
-                    scanResults.setText("Could not set up the detector!");
+                    etscanResults.setText("");
                 }
             } catch (Exception e) {
                 Toast.makeText(this, "Failed to load Image", Toast.LENGTH_SHORT)
@@ -135,7 +240,7 @@ public class Scanning_OCR extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         if (imageUri != null) {
             outState.putString(SAVED_INSTANCE_URI, imageUri.toString());
-            outState.putString(SAVED_INSTANCE_RESULT, scanResults.getText().toString());
+            outState.putString(SAVED_INSTANCE_RESULT, etscanResults.getText().toString());
         }
         super.onSaveInstanceState(outState);
     }

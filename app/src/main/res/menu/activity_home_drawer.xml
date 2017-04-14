@@ -36,9 +36,14 @@
                 android:icon="@drawable/ic_menu_share"
                 android:title="Share" />
             <item
-                android:id="@+id/nav_feedback"
+                android:id="@+id/nav_feed_rate"
+
+                android:icon="@drawable/ic_create_black_24dp"
+                android:title="Feedback and Rate Us" />
+            <item
+                android:id="@+id/nav_developer"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Feedbacks" />
+                android:title="Developer" />
         </menu>
     </item>
 
