@@ -158,11 +158,11 @@ public class FeedbackRateus extends AppCompatActivity implements RatingBar.OnRat
                     .start();
         }
         String comments=txtComments.getText().toString();
-        if (comments.isEmpty())
+       /* if (comments.isEmpty())
         {
             txtComments.setError("Please give some Feedback");
             return;
-        }
+        }*/
         //Firebase Upload
         HashMap<String,String> feed=new HashMap<>();
         feed.put("Feedback" , comments);
