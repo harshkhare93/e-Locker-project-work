@@ -14,6 +14,10 @@ import android.widget.TextView;
 
 import com.github.florent37.viewanimator.AnimationListener;
 import com.github.florent37.viewanimator.ViewAnimator;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,12 +38,18 @@ public class FeedbackRateus extends AppCompatActivity implements RatingBar.OnRat
     @BindView(R.id.lblThanksFeedback) TextView txtThanks;
 
     boolean isAnimated = false;
+    private FirebaseDatabase db;
+    private DatabaseReference feedbackref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback_rateus);
         ButterKnife.bind(this);
+        db = FirebaseDatabase.getInstance();
+        feedbackref = db.getReference("Feedback");
+
+
 
         initializeUI();
     }
@@ -147,6 +157,20 @@ public class FeedbackRateus extends AppCompatActivity implements RatingBar.OnRat
                     .duration(600)
                     .start();
         }
+        String comments=txtComments.getText().toString();
+        if (comments.isEmpty())
+        {
+            txtComments.setError("Please give some Feedback");
+            return;
+        }
+        //Firebase Upload
+        HashMap<String,String> feed=new HashMap<>();
+        feed.put("Feedback" , comments);
+        feedbackref.push().setValue(feed);
+        txtComments.setText("");
+
     }
+
+
 
 }
