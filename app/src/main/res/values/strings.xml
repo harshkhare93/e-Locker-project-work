@@ -36,4 +36,7 @@
     <string name="clipboard_copy_successful_message">Copied to clipboard.</string>
 
     <string name="title_activity_feedback_rateus">Feedback And Rate Us</string>
+    <string name="invitation_title">Download e-Locker</string>
+    <string name="invitation_message">Download e-Locker this help to make India Paperless</string>
+    <string name="invitation_cta">call to action</string>
 </resources>

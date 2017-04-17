@@ -1,8 +1,10 @@
 package harshkhare.e_locker;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -10,19 +12,34 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 
+import com.google.android.gms.appinvite.AppInvite;
+import com.google.android.gms.appinvite.AppInviteInvitation;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import static android.R.attr.id;
 import static harshkhare.e_locker.R.id.nav_logout;
 
-public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
+    public static final String TAG = "App Sharing";
+    public static final int REQUEST_INVITE = 232;
     private MenuItem logout;
     private FloatingActionButton fabscandoc;
+    private GoogleApiClient mGoogleApiClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +57,14 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         logout = (MenuItem) findViewById(R.id.nav_logout);
         fabscandoc = (FloatingActionButton) findViewById(R.id.fabScandoc);
         fabscandoc.setOnClickListener(this);
+
+        //App Sharing code
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API)
+                .addApi(AppInvite.API)
+                .build();
+
     }
 
     @Override
@@ -81,8 +106,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         switch (item.getItemId()) {
 
             case R.id.nav_camera:
-               // todo Handle the camera action
-                Intent camera=new Intent(Home.this,Scanning_OCR.class);
+                // todo Handle the camera action
+                Intent camera = new Intent(Home.this, Scanning_OCR.class);
                 startActivity(camera);
                 break;
             case R.id.nav_upload:
@@ -96,7 +121,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             case R.id.nav_profile:
                 //// TODO: get users profile info.
 
-                Intent profileinfo=new Intent(Home.this,GetProfileInformationActivity.class);
+                Intent profileinfo = new Intent(Home.this, GetProfileInformationActivity.class);
                 startActivity(profileinfo);
 
                 break;
@@ -108,7 +133,9 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 break;
             case R.id.nav_share:
                 //// TODO: shareApp
-                break;
+                sendInvitation();
+                return true;
+
 
             case R.id.nav_developer:
                 //// TODO: send email direct Developer
@@ -116,9 +143,9 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 emailIntent.setType("text/plain");*/
                 Intent i = new Intent(Intent.ACTION_SEND);
                 i.setType("message/rfc822");
-                i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"harshkhare93@gmail.com"});
+                i.putExtra(Intent.EXTRA_EMAIL, new String[]{"harshkhare93@gmail.com"});
                 i.putExtra(Intent.EXTRA_SUBJECT, "subject of email");
-                i.putExtra(Intent.EXTRA_TEXT   , "body of email");
+                i.putExtra(Intent.EXTRA_TEXT, "body of email");
                 try {
                     startActivity(Intent.createChooser(i, "Send mail..."));
                 } catch (android.content.ActivityNotFoundException ex) {
@@ -128,7 +155,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
             case R.id.nav_feed_rate:
                 //Todo feedback and Rate app
-                Intent feedbackrate=new Intent(this,FeedbackRateus.class);
+                Intent feedbackrate = new Intent(this, FeedbackRateus.class);
                 startActivity(feedbackrate);
                 break;
 
@@ -153,7 +180,56 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
     @Override
     public void onClick(View v) {
-        Intent i =new Intent(this,Scanning_OCR.class);
+        Intent i = new Intent(this, Scanning_OCR.class);
         startActivity(i);
     }
+
+    //App Sharing Code Methods
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d(TAG, "onConnectionFailed:" + connectionResult);
+    }
+
+    private void sendInvitation() {
+        Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
+                .setMessage(getString(R.string.invitation_message))
+                .setCallToActionText(getString(R.string.invitation_cta))
+                .build();
+        startActivityForResult(intent, REQUEST_INVITE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        if (requestCode == REQUEST_INVITE) {
+            if (resultCode == RESULT_OK) {
+                // Check how many invitations were sent and log.
+                String[] ids = AppInviteInvitation.getInvitationIds(resultCode, data);
+                Log.d(TAG, "Invitations sent: " + ids.length);
+            } else {
+                // Sending failed or it was canceled, show failure message to the user
+                Log.d(TAG, "Failed to send invitation.");
+            }
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+
 }

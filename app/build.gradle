@@ -41,6 +41,7 @@ dependencies {
     compile 'com.github.florent37:viewanimator:1.0.5'
     compile 'com.intuit.sdp:sdp-android:1.0.4'
     compile 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile 'com.google.android.gms:play-services-appinvite:10.0.1'
     testCompile 'junit:junit:4.12'
 }
 
