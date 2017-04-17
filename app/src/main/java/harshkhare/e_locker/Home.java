@@ -19,11 +19,15 @@ import android.view.View;
 import android.widget.Toast;
 
 
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.appinvite.AppInvite;
 import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.FirebaseStorage;
@@ -39,6 +43,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     private MenuItem logout;
     private FloatingActionButton fabscandoc;
     private GoogleApiClient mGoogleApiClient;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
 
     @Override
@@ -57,6 +63,19 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         logout = (MenuItem) findViewById(R.id.nav_logout);
         fabscandoc = (FloatingActionButton) findViewById(R.id.fabScandoc);
         fabscandoc.setOnClickListener(this);
+        mAuth = FirebaseAuth.getInstance();
+        mAuthListener =new FirebaseAuth.AuthStateListener(){
+
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user=firebaseAuth.getCurrentUser();
+                if(user==null){
+                    Intent logint =new Intent(Home.this,LoginMainActivity.class);
+                    startActivity(logint);
+                    finish();
+                }
+            }
+        };
 
         //App Sharing code
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -167,6 +186,14 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
             case nav_logout:
                 //// TODO: user logout
+                mAuth.signOut();
+                try {
+                    LoginManager.getInstance().logOut();
+                    AccessToken.setCurrentAccessToken(null);
+                } catch (Exception ignored){
+                }
+                Intent lgtIntent=new Intent(this,LoginMainActivity.class);
+                startActivity(lgtIntent);
 
                 finish();
                 break;
