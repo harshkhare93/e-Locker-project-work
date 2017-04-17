@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 
 import static android.R.attr.id;
@@ -111,8 +112,18 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
             case R.id.nav_developer:
                 //// TODO: send email direct Developer
-                Intent emailIntent= new Intent(Intent.ACTION_SEND);
-                emailIntent.setType("text/plain");
+               /* Intent emailIntent= new Intent(Intent.ACTION_SEND);
+                emailIntent.setType("text/plain");*/
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("message/rfc822");
+                i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"harshkhare93@gmail.com"});
+                i.putExtra(Intent.EXTRA_SUBJECT, "subject of email");
+                i.putExtra(Intent.EXTRA_TEXT   , "body of email");
+                try {
+                    startActivity(Intent.createChooser(i, "Send mail..."));
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                }
                 break;
 
             case R.id.nav_feed_rate:
