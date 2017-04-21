@@ -3,8 +3,10 @@ package harshkhare.e_locker;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -26,6 +28,7 @@ import static android.R.id.progress;
 public class GetProfileInformationActivity extends AppCompatActivity {
 
 
+    public static final String TAG = "Profile";
     private ImageView imageView;
     private FirebaseAuth auth;
     private TextView email;
@@ -39,6 +42,7 @@ public class GetProfileInformationActivity extends AppCompatActivity {
     private UserInfo profile;
     private Uri photoUrl;
     private FirebaseUser user;
+    private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
 
@@ -50,37 +54,58 @@ public class GetProfileInformationActivity extends AppCompatActivity {
         imageView = (ImageView) findViewById(R.id.imageView);
         name = (TextView) findViewById(R.id.name);
         email = (TextView) findViewById(R.id.email);
-        //  progressBar = (ProgressBar) findViewById(R.id.progressbar);
+        getCurrentUser();//Calling method
 
-        auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
-        if (user == null) {
-            finish();
-        }
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth.AuthStateListener mAuthListener;
+        mAuthListener=new FirebaseAuth.AuthStateListener(){
 
-        email.setText(user.getEmail());
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user=firebaseAuth.getCurrentUser();
+                if (user!=null){
+                    //User is signed in
+                    Log.d(TAG,"onAuthStateChanged : signed_in");
+
+
+
+                }else{
+                    //User is Signed out
+                    Log.d(TAG,"onAuthStateChanged : signed_out ");
+
+                }
+            }
+        };
+
 
         //Loading image from below url into imageView
         Picasso.with(this)
                 .load(user.getPhotoUrl())
                 .into(imageView);
 
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user == null) {
-                    //user is signed in
-                    // dialog.dismiss();
-                    Intent detail = new Intent(GetProfileInformationActivity.this, LoginMainActivity.class);
-                    startActivity(detail);
-                    finish();
-                    detail.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(detail);
-                }
 
-            }
-        };
+    }
+    public void getCurrentUser()
+    {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null)
+        {
+            String username=user.getDisplayName();
+            String useremail=user.getEmail();
+            String uid=user.getUid();
+        }
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
     }
 
 

@@ -7,8 +7,10 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -71,6 +73,11 @@ public class Scanning_OCR extends AppCompatActivity {
     private EditText etscanResults;
     private ProgressBar pbStatus;
     private TextView tvUploadStatus;
+    private DatabaseReference databaseReference;
+    private FirebaseUser currentUser;
+    private String uid;
+    private String username;
+    private DatabaseReference user_scanDB;
 
 
     @Override
@@ -100,8 +107,7 @@ public class Scanning_OCR extends AppCompatActivity {
         btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ActivityCompat.requestPermissions(Scanning_OCR.this, new
-                        String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
+                handleScanInterface();
             }
         });
         btnUpload.setOnClickListener(new View.OnClickListener() {
@@ -110,6 +116,26 @@ public class Scanning_OCR extends AppCompatActivity {
                 uploadToFirebase(v);
             }
         });
+        databaseReference = db.getReference("docs_db");
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        uid = currentUser.getUid();
+        user_scanDB = databaseReference.child(uid);
+
+        username = currentUser.getDisplayName();
+
+    }
+
+    private void handleScanInterface() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(Scanning_OCR.this, new
+                        String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, REQUEST_WRITE_PERMISSION);
+            } else {
+                takePicture();
+            }
+        } else {
+            takePicture();
+        }
     }
 
     private void uploadToFirebase(final View v) {
@@ -117,15 +143,16 @@ public class Scanning_OCR extends AppCompatActivity {
         pbStatus.setVisibility(View.VISIBLE);
         ivScanDoc.setDrawingCacheEnabled(true);
         ivScanDoc.buildDrawingCache();
-        Bitmap bitmap = ivScanDoc.getDrawingCache();
+        /*Bitmap bitmap = ivScanDoc.getDrawingCache();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] data = baos.toByteArray();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+        byte[] data = baos.toByteArray();*/
         // Date currentDate = new Date(System.currentTimeMillis());
         //String date=currentDate.toString();
 
-        StorageReference docs = FirebaseStorage.getInstance().getReference("docs");
-        UploadTask uploadTask = docs.putBytes(data);
+        String filename = "docs_" + System.currentTimeMillis();
+        StorageReference docs = FirebaseStorage.getInstance().getReference(filename);
+        UploadTask uploadTask = docs.putFile(imageUri);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
@@ -136,29 +163,19 @@ public class Scanning_OCR extends AppCompatActivity {
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 @SuppressWarnings("VisibleForTests")
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                DatabaseReference databaseReference = db.getReference("docs_db");
-                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                String uid = currentUser.getUid();
-                String username = currentUser.getDisplayName();
+                Toast.makeText(Scanning_OCR.this, downloadUrl.toString(), Toast.LENGTH_SHORT).show();
+/*                String text = etscanResults.getText().toString();
+                if (text.isEmpty()) {
+                    text = "No extra info";
+                }
                 HashMap<String, Object> data = new HashMap<>();
                 data.put("url", downloadUrl);
                 data.put("user", username);
                 data.put("uploaded_on", System.currentTimeMillis());
-                String text = etscanResults.getText().toString();
-                if (text.isEmpty()) {
-                    text = "No extra info";
-                }
                 data.put("desc", text);
-                databaseReference.child(uid).setValue(data, new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                        if (databaseError == null) {
-                            pbStatus.setVisibility(View.GONE);
-                            Toast.makeText(Scanning_OCR.this, "Upload successful", Toast.LENGTH_SHORT).show();
-                        }
-                        v.setEnabled(true);
-                    }
-                });
+                user_scanDB.push().setValue(data);
+                pbStatus.setVisibility(View.GONE);*/
+
             }
         }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -177,10 +194,11 @@ public class Scanning_OCR extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case REQUEST_WRITE_PERMISSION:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                     takePicture();
                 } else {
                     Toast.makeText(Scanning_OCR.this, "Permission Denied!", Toast.LENGTH_SHORT).show();
+                    handleScanInterface();
                 }
         }
     }
