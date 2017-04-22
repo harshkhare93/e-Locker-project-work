@@ -7,12 +7,14 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.os.AsyncTaskCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -143,15 +145,16 @@ public class Scanning_OCR extends AppCompatActivity {
         pbStatus.setVisibility(View.VISIBLE);
         ivScanDoc.setDrawingCacheEnabled(true);
         ivScanDoc.buildDrawingCache();
-        /*Bitmap bitmap = ivScanDoc.getDrawingCache();
+        Bitmap bitmap = ivScanDoc.getDrawingCache();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
-        byte[] data = baos.toByteArray();*/
+        byte[] data = baos.toByteArray();
         // Date currentDate = new Date(System.currentTimeMillis());
         //String date=currentDate.toString();
 
         String filename = "docs_" + System.currentTimeMillis();
         StorageReference docs = FirebaseStorage.getInstance().getReference(filename);
+
         UploadTask uploadTask = docs.putFile(imageUri);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
@@ -163,19 +166,14 @@ public class Scanning_OCR extends AppCompatActivity {
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 @SuppressWarnings("VisibleForTests")
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                Toast.makeText(Scanning_OCR.this, downloadUrl.toString(), Toast.LENGTH_SHORT).show();
-/*                String text = etscanResults.getText().toString();
+                //Toast.makeText(Scanning_OCR.this, downloadUrl.toString(), Toast.LENGTH_SHORT).show();
+                String text = etscanResults.getText().toString();
                 if (text.isEmpty()) {
                     text = "No extra info";
                 }
-                HashMap<String, Object> data = new HashMap<>();
-                data.put("url", downloadUrl);
-                data.put("user", username);
-                data.put("uploaded_on", System.currentTimeMillis());
-                data.put("desc", text);
-                user_scanDB.push().setValue(data);
-                pbStatus.setVisibility(View.GONE);*/
 
+                pbStatus.setVisibility(View.GONE);
+                new MyUploadTask().execute(downloadUrl.toString(), text, uid);
             }
         }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -284,5 +282,28 @@ public class Scanning_OCR extends AppCompatActivity {
 
         return BitmapFactory.decodeStream(ctx.getContentResolver()
                 .openInputStream(uri), null, bmOptions);
+    }
+
+    class MyUploadTask extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... params) {
+            String url = params[0];
+            String infoText = params[1];
+            String uid=params[2];
+            HashMap<String, Object> data = new HashMap<>();
+            data.put("url", url);
+            data.put("userid", uid);
+            data.put("uploaded_on", System.currentTimeMillis());
+            data.put("desc", infoText);
+            user_scanDB.push().setValue(data);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            Toast.makeText(Scanning_OCR.this, "uploaded", Toast.LENGTH_SHORT).show();
+            //show success
+        }
     }
 }
