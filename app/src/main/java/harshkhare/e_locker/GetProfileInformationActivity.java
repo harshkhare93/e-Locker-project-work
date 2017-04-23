@@ -12,18 +12,11 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
-import static android.R.attr.data;
-import static android.R.attr.onClick;
-import static android.R.id.progress;
 
 public class GetProfileInformationActivity extends AppCompatActivity {
 

@@ -1,7 +1,6 @@
 package harshkhare.e_locker;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import android.support.annotation.NonNull;
@@ -11,11 +10,14 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
@@ -28,15 +30,18 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import static android.R.attr.id;
+import java.util.ArrayList;
+import java.util.List;
+
 import static harshkhare.e_locker.R.id.nav_logout;
 
-public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
     public static final String TAG = "App Sharing";
     public static final int REQUEST_INVITE = 232;
@@ -45,6 +50,13 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     private GoogleApiClient mGoogleApiClient;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseDatabase db;
+    private DatabaseReference myref;
+    List<ScanModel> doumentList;
+    private ArrayList<Object> documentList;
+    private RecyclerView rvDesc;
+    private ProgressBar pb;
+
 
 
     @Override
@@ -70,20 +82,74 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user=firebaseAuth.getCurrentUser();
                 if(user==null){
-                    Intent logint =new Intent(Home.this,LoginMainActivity.class);
+                    Intent logint =new Intent(HomeActivity.this,LoginMainActivity.class);
                     startActivity(logint);
                     finish();
                 }
             }
         };
+        initGoogleApi();
 
+
+        //Recycler View Code
+        pb = (ProgressBar) findViewById(R.id.pbbar);
+        db = FirebaseDatabase.getInstance();
+        myref = db.getReference();
+        //Getting data from firebase code (Recycler view)
+        myref = db.getReference("docs_db").child(mAuth.getCurrentUser().getUid());
+        //creating blank list in memory
+        documentList =new ArrayList<>();
+        //Recycler View Object
+        final RecyclerView rvDescription= (RecyclerView) findViewById(R.id.rvDescription);
+        LinearLayoutManager manager= new LinearLayoutManager(this);
+        //passing layput manager
+        rvDescription.setLayoutManager(manager);
+        //setup Listener
+        //using anonymous class
+        myref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //Data is in data Snapshot obj
+                documentList.clear();
+                if (dataSnapshot.hasChildren()){
+                    //here write datasnapshot.children().{then write iterator and chose for loop then next line automaticaaly genrated}
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        documentList.add(new ScanModel(snapshot));
+                    }
+                    Toast.makeText(HomeActivity.this, "Data loaded Successfully", Toast.LENGTH_SHORT).show();
+
+                    DocumentAdapter adapter=new DocumentAdapter(documentList);
+                    rvDescription.setAdapter(adapter);
+                }
+                else {
+                    Toast.makeText(HomeActivity.this, "Data not Available", Toast.LENGTH_SHORT).show();
+                }
+
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(HomeActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+
+
+
+
+
+    }
+
+    private void initGoogleApi() {
         //App Sharing code
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
                 .addApi(AppInvite.API)
                 .build();
-
     }
 
     @Override
@@ -106,7 +172,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
+        // automatically handle clicks on the HomeActivity/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
@@ -126,11 +192,13 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
             case R.id.nav_camera:
                 // todo Handle the camera action
-                Intent camera = new Intent(Home.this, Scanning_OCR.class);
+                Intent camera = new Intent(HomeActivity.this, Scanning_OCR.class);
                 startActivity(camera);
                 break;
-            case R.id.nav_upload:
-                //todo upload documents
+            case R.id.nav_fav:
+                //todo Favorites documents
+                Intent fav=new Intent(HomeActivity.this,FavoritesActivity.class);
+                startActivity(fav);
                 break;
 
             case R.id.nav_download:
@@ -140,14 +208,14 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             case R.id.nav_profile:
                 //// TODO: get users profile info.
 
-                Intent profileinfo = new Intent(Home.this, GetProfileInformationActivity.class);
+                Intent profileinfo = new Intent(HomeActivity.this, GetProfileInformationActivity.class);
                 startActivity(profileinfo);
 
                 break;
 
             case R.id.nav_about:
                 //TODO shows about app information
-                Intent about = new Intent(Home.this, AboutActivity.class);
+                Intent about = new Intent(HomeActivity.this, AboutActivity.class);
                 startActivity(about);
                 break;
             case R.id.nav_share:
