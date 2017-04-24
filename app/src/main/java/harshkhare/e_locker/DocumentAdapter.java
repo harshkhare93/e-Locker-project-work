@@ -47,9 +47,9 @@ public class DocumentAdapter extends RecyclerView.Adapter<DocumentHolder> {
         holder.tvDate.setText(String.valueOf(model.getUploaded_on()));
 
         Picasso.with(holder.ivDoc.getContext())
-                .load(RecyclerView.setVisibility(View.VISIBLE)model.getUrl())
+                .load(model.getUrl())
                 .into(holder.ivDoc);
-                pb.setVisibility(View GONE);
+
 
 
 

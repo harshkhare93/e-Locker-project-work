@@ -18,7 +18,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginMainActivity">
+        <activity android:name=".LoginMainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -55,7 +56,8 @@
             android:name=".AboutActivity"
             android:label="@string/title_activity_about"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".GetProfileInformationActivity" />
+        <activity android:name=".GetProfileInformationActivity"
+            android:label="My Profile"/>
         <activity android:name=".Scanning_OCR" />
         <activity
             android:name=".FeedbackRateus"
