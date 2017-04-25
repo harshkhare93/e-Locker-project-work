@@ -154,9 +154,11 @@ public class Scanning_OCR extends AppCompatActivity {
         ivScanDoc.setDrawingCacheEnabled(true);
         ivScanDoc.buildDrawingCache();
         Bitmap bitmap = ivScanDoc.getDrawingCache();
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
+
         // Date currentDate = new Date(System.currentTimeMillis());
         //String date=currentDate.toString();
 

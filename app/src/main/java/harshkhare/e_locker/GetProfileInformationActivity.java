@@ -45,7 +45,7 @@ public class GetProfileInformationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_get_profile_information);
         // create object
         imageView = (ImageView) findViewById(R.id.imageView);
-       // name = (TextView) findViewById(R.id.name);
+        name = (TextView) findViewById(R.id.name);
         email = (TextView) findViewById(R.id.email);
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
@@ -55,6 +55,7 @@ public class GetProfileInformationActivity extends AppCompatActivity {
 
         }
         email.setText(user.getEmail());
+        name.setText(user.getDisplayName());
 
         //Loading image from below url into imageView
         Picasso.with(this)

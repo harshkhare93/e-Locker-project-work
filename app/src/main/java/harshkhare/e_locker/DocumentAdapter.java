@@ -48,6 +48,8 @@ public class DocumentAdapter extends RecyclerView.Adapter<DocumentHolder> {
 
         Picasso.with(holder.ivDoc.getContext())
                 .load(model.getUrl())
+                .resize(600, 200)
+                .onlyScaleDown()
                 .into(holder.ivDoc);
 
 

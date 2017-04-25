@@ -1,6 +1,11 @@
 package harshkhare.e_locker;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 
 import android.support.annotation.NonNull;
@@ -17,7 +22,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -35,6 +42,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +65,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private ArrayList<Object> documentList;
     private RecyclerView rvDesc;
     private ProgressBar pb;
-
+    private View headerView;
 
 
     @Override
@@ -74,6 +83,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         logout = (MenuItem) findViewById(R.id.nav_logout);
         fabscandoc = (FloatingActionButton) findViewById(R.id.fabScandoc);
+        headerView = navigationView.getHeaderView(0);//header view object for getting image on nav_bar
+        updateui(headerView);
         fabscandoc.setOnClickListener(this);
         mAuth = FirebaseAuth.getInstance();
         mAuthListener =new FirebaseAuth.AuthStateListener(){
@@ -309,6 +320,58 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         }
     }
+    //featching profile information in header view-----------------------------------------------------
+    private void updateui(View headerView) {
+        ImageView imageView = (ImageView) headerView.findViewById(R.id.imageView);
+        TextView name = (TextView) headerView.findViewById(R.id.name);
+        TextView email = (TextView) headerView.findViewById(R.id.email);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String username = user.getDisplayName();
+        String email1 = user.getEmail();
+        Uri photoUrl = user.getPhotoUrl();
+        name.setText(username);
+        email.setText(email1);
+        Picasso.with(this)
+                .load(photoUrl)
+                .transform(new CircleTransform())
+                .into(imageView);
+    }
+    private class CircleTransform implements Transformation {
+        @Override
+        public Bitmap transform(Bitmap source) {
+            int size = Math.min(source.getWidth(), source.getHeight());
+
+            int x = (source.getWidth() - size) / 2;
+            int y = (source.getHeight() - size) / 2;
+
+            Bitmap squaredBitmap = Bitmap.createBitmap(source, x, y, size, size);
+            if (squaredBitmap != source) {
+                source.recycle();
+            }
+
+            Bitmap bitmap = Bitmap.createBitmap(size, size, source.getConfig());
+
+            Canvas canvas = new Canvas(bitmap);
+            Paint paint = new Paint();
+            BitmapShader shader = new BitmapShader(squaredBitmap,
+                    BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP);
+            paint.setShader(shader);
+            paint.setAntiAlias(true);
+
+            float r = size / 2f;
+            canvas.drawCircle(r, r, r, paint);
+
+            squaredBitmap.recycle();
+            return bitmap;
+        }
+
+        @Override
+        public String key() {
+            return "circle";
+        }
+
+    }
+
 
     @Override
     protected void onStart() {

@@ -30,6 +30,10 @@
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Scanning_OCR"
+            android:label="Scan your Document"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -58,7 +62,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".GetProfileInformationActivity"
             android:label="My Profile"/>
-        <activity android:name=".Scanning_OCR" />
+
         <activity
             android:name=".FeedbackRateus"
             android:label="@string/title_activity_feedback_rateus"></activity>

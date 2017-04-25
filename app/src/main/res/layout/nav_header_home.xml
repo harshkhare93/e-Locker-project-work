@@ -14,8 +14,29 @@
     android:weightSum="1">
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/imageView"
+        android:layout_width="76dp"
+        android:layout_height="76dp"
+        android:scaleType="center" />
+
+    <TextView
+        android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/cloud" />
+        android:fontFamily="cursive"
+        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:textAlignment="textStart"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="#000"
+        android:textSize="17sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#e8b32143"
+        android:textStyle="bold"
+        android:layout_weight="0.36" />
+
 </LinearLayout>
