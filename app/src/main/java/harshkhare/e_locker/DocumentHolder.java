@@ -14,13 +14,13 @@ public class DocumentHolder extends RecyclerView.ViewHolder {
     public ImageView ivDoc;
     TextView tvdesc;
     TextView tvDate;
-    private final ProgressBar pb;
+
 
     public DocumentHolder(View itemView) {
         super(itemView);
         tvdesc= (TextView) itemView.findViewById(R.id.tvdesc);
         ivDoc = (ImageView) itemView.findViewById(R.id.ivDoc);
         tvDate= (TextView) itemView.findViewById(R.id.tvDate);
-        pb = (ProgressBar) itemView.findViewById(R.id.pbbar);
+
     }
 }

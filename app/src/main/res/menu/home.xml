@@ -4,9 +4,9 @@
     <item
         android:id="@+id/action_settings"
         android:checkable="false"
-        android:enabled="false"
+        android:enabled="true"
         android:icon="@drawable/ic_notifications_black_24dp"
         android:orderInCategory="100"
         android:title="Set Reminder"
-        app:showAsAction="never|always" />
+        app:showAsAction="never" />
 </menu>

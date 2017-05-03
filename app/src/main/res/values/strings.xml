@@ -41,4 +41,13 @@
     <string name="invitation_message">Download e-Locker this help to make India Paperless</string>
     <string name="invitation_cta">call to action</string>
     <string name="title_activity_favorites">FavoritesActivity</string>
+    <string name="document_notification">Document Notification</string>
+    <string name="set_notification" />
+    <string name="set_ringtones">Set Ringtones</string>
+    <string name="new_message_notification_title_template">Document status is</string>
+    <string name="new_message_notification_placeholder_text_template">Document : Please check your Document Expiry date
+    </string>
+    <string name="action_open">open</string>
+
+
 </resources>

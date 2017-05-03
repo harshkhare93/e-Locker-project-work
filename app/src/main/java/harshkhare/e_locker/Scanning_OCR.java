@@ -239,7 +239,7 @@ public class Scanning_OCR extends AppCompatActivity {
                     }
 
                     if (textBlocks.size() == 0) {
-                        etscanResults.setText("");
+                        etscanResults.setText("Found Nothing to Scan. Please try again!!");
                     } else {
                         etscanResults.setText(etscanResults.getText() + words + "\n");
                     }

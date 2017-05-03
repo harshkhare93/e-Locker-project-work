@@ -2,4 +2,5 @@
 <resources>
     <item name="tvTitle" type="id">tvTitle</item>
     <item name="ivImages" type="id">ivImages</item>
+    <item name="lin_lay" type="id" />
 </resources>

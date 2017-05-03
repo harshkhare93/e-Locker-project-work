@@ -103,7 +103,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
         //Recycler View Code
-        pb = (ProgressBar) findViewById(R.id.pbbar);
+      //  pb = (ProgressBar) findViewById(R.id.pbbar);
         db = FirebaseDatabase.getInstance();
         myref = db.getReference();
         //Getting data from firebase code (Recycler view)
@@ -189,7 +189,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent setting=new Intent(HomeActivity.this, CalenderActivity.class);
+            startActivity(setting);
+            return  true;
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -206,11 +209,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 Intent camera = new Intent(HomeActivity.this, Scanning_OCR.class);
                 startActivity(camera);
                 break;
-            case R.id.nav_fav:
-                //todo Favorites documents
-                Intent fav=new Intent(HomeActivity.this,FavoritesActivity.class);
-                startActivity(fav);
-                break;
+
 
             case R.id.nav_download:
                 // TODO users download documents

@@ -18,7 +18,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginMainActivity"
+        <activity
+            android:name=".LoginMainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -60,16 +61,16 @@
             android:name=".AboutActivity"
             android:label="@string/title_activity_about"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".GetProfileInformationActivity"
-            android:label="My Profile"/>
-
+        <activity
+            android:name=".GetProfileInformationActivity"
+            android:label="My Profile" />
         <activity
             android:name=".FeedbackRateus"
-            android:label="@string/title_activity_feedback_rateus"></activity>
+            android:label="@string/title_activity_feedback_rateus" />
         <activity
-            android:name=".FavoritesActivity"
-            android:label="@string/title_activity_favorites"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:name=".CalenderActivity"
+            android:label="Reminder Settings"></activity>
+        <activity android:name=".Notificationsetting"></activity>
     </application>
 
 </manifest>
