@@ -8,13 +8,9 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="Scan Documents" />
         <item
-            android:id="@+id/nav_download"
-            android:icon="@drawable/ic_cloud_download_black_24dp"
-            android:title="Download Documents" />
-        <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_account_circle_black_24dp"
-            android:title="Profile" />
+            android:title="My Profile" />
     </group>
 
     <item

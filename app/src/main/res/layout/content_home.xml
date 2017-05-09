@@ -42,7 +42,7 @@
         android:layout_marginBottom="29dp"
         android:layout_marginEnd="42dp"
         android:clickable="true"
-        app:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="#c80a1d"
         app:fabSize="normal"
         app:srcCompat="@drawable/ic_menu_camera"
         tools:layout_editor_absoluteX="326dp"

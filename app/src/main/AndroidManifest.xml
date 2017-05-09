@@ -69,8 +69,12 @@
             android:label="@string/title_activity_feedback_rateus" />
         <activity
             android:name=".CalenderActivity"
-            android:label="Reminder Settings"></activity>
-        <activity android:name=".Notificationsetting"></activity>
+            android:label="Reminder Settings" />
+        <activity android:name=".Notificationsetting" />
+        <activity
+            android:name=".Document_desc"
+            android:label="Document Description"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

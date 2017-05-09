@@ -48,6 +48,7 @@
     <string name="new_message_notification_placeholder_text_template">Document : Please check your Document Expiry date
     </string>
     <string name="action_open">open</string>
+    <string name="title_activity_document_desc">Document Description</string>
 
 
 </resources>

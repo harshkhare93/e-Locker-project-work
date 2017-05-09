@@ -37,6 +37,7 @@ public class GetProfileInformationActivity extends AppCompatActivity {
     private FirebaseUser user;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private ProgressBar pbproimg;
 
 
     @Override
@@ -47,6 +48,9 @@ public class GetProfileInformationActivity extends AppCompatActivity {
         imageView = (ImageView) findViewById(R.id.imageView);
         name = (TextView) findViewById(R.id.name);
         email = (TextView) findViewById(R.id.email);
+        pbproimg = (ProgressBar) findViewById(R.id.pbproimg);
+        pbproimg.setVisibility(View.GONE);
+
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         if (user == null) {
@@ -58,10 +62,11 @@ public class GetProfileInformationActivity extends AppCompatActivity {
         name.setText(user.getDisplayName());
 
         //Loading image from below url into imageView
+
         Picasso.with(this)
                 .load(user.getPhotoUrl())
                 .into(imageView);
-
+        pbproimg.setVisibility(View.INVISIBLE);
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {

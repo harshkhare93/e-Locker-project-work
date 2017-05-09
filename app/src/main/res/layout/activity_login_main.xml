@@ -108,5 +108,15 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="78dp" />
 
+    <ProgressBar
+        android:id="@+id/pbgoogle"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textView4"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="22dp"
+        android:visibility="invisible" />
+
 
 </RelativeLayout>

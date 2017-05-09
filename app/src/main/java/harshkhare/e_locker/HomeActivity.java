@@ -42,12 +42,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static harshkhare.e_locker.R.id.ivDoc;
 import static harshkhare.e_locker.R.id.nav_logout;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
@@ -110,6 +112,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         myref = db.getReference("docs_db").child(mAuth.getCurrentUser().getUid());
         //creating blank list in memory
         documentList =new ArrayList<>();
+
         //Recycler View Object
         final RecyclerView rvDescription= (RecyclerView) findViewById(R.id.rvDescription);
         LinearLayoutManager manager= new LinearLayoutManager(this);
@@ -148,11 +151,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         });
 
 
-
-
-
-
     }
+
+
+
 
     private void initGoogleApi() {
         //App Sharing code
@@ -211,9 +213,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
 
-            case R.id.nav_download:
-                // TODO users download documents
-                break;
+
 
             case R.id.nav_profile:
                 //// TODO: get users profile info.

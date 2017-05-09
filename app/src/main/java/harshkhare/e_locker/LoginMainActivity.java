@@ -4,11 +4,13 @@ package harshkhare.e_locker;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.transition.Visibility;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -43,6 +45,7 @@ public class LoginMainActivity extends AppCompatActivity implements View.OnClick
     private GoogleApiClient mGoogleApiClient;
     private LoginButton loginButton;
     private CallbackManager mCallbackManager;
+    private ProgressBar pbgoogle;
 
 
     @Override
@@ -83,6 +86,8 @@ public class LoginMainActivity extends AppCompatActivity implements View.OnClick
             }
         };
         //final line
+        pbgoogle = (ProgressBar) findViewById(R.id.pbgoogle);
+        pbgoogle.setVisibility(View.GONE);
         goolgeLoginButton.setOnClickListener(this);
 
 
@@ -144,6 +149,7 @@ public class LoginMainActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
+        pbgoogle.setVisibility(View.VISIBLE);
         switch (v.getId()) {
             case R.id.googlelogin:
                 signIn();
