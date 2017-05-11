@@ -113,6 +113,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         //creating blank list in memory
         documentList =new ArrayList<>();
 
+
         //Recycler View Object
         final RecyclerView rvDescription= (RecyclerView) findViewById(R.id.rvDescription);
         LinearLayoutManager manager= new LinearLayoutManager(this);

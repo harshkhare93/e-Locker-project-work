@@ -67,10 +67,28 @@ public class Notificationsetting extends AppCompatActivity implements View.OnCli
                 showClockDialog();
             }
         });
+        btnsave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(Notificationsetting.this, "Long press to clear app database", Toast.LENGTH_SHORT).show();
+            }
+        });
+        btnsave.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                addnotification();
+                updateUI();
+                return true;
+            }
+        });
 
 
     }
 
+    private  void addnotification(){
+        Context context=this.getApplicationContext();
+        NewMessageNotification.notify(context,"You have one Notification" , 0);
+    }
 
 
     private void showClockDialog() {

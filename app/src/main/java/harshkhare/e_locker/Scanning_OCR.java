@@ -42,6 +42,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -51,6 +52,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -86,8 +88,7 @@ public class Scanning_OCR extends AppCompatActivity {
     private String username;
     private DatabaseReference user_scanDB;
     private DatabaseReference myref;
-
-
+    private ImageView downloadimage;
 
 
     @Override
@@ -96,6 +97,7 @@ public class Scanning_OCR extends AppCompatActivity {
         setContentView(R.layout.activity_scanning__ocr);
         Button btnUpload = (Button) findViewById(R.id.btnUpload);
         Button btnScan = (Button) findViewById(R.id.btnScan);
+       // downloadimage = (ImageView) findViewById(R.id.ivdownload);
         ivScanDoc = (ImageView) findViewById(R.id.ivScanDoc);
         etscanResults = (EditText) findViewById(R.id.etscanResults);
         storage = FirebaseStorage.getInstance();
@@ -107,6 +109,7 @@ public class Scanning_OCR extends AppCompatActivity {
 
         pbStatus = (ProgressBar) findViewById(R.id.pbStatus);
         pbStatus.setVisibility(View.GONE);
+
 
         tvUploadStatus = (TextView) findViewById(R.id.tvUploadStatus);
         if (savedInstanceState != null) {
@@ -126,6 +129,17 @@ public class Scanning_OCR extends AppCompatActivity {
                 uploadToFirebase(v);
             }
         });
+        /*downloadimage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    downloadfromFirebase(view);
+                } catch (IOException e) {
+
+
+                }
+            }
+        });*/
         databaseReference = db.getReference("docs_db");
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         uid = currentUser.getUid();
@@ -147,7 +161,7 @@ public class Scanning_OCR extends AppCompatActivity {
             takePicture();
         }
     }
-
+//--------- uploading data from database-------------------
     private void uploadToFirebase(final View v) {
         v.setEnabled(false);
         pbStatus.setVisibility(View.VISIBLE);
@@ -196,6 +210,26 @@ public class Scanning_OCR extends AppCompatActivity {
             }
         });
     }
+    /*------------------Downloading data from database-----------------------
+    private void downloadfromFirebase(final View v) throws IOException {
+        v.setEnabled(false);
+        File localFile = File.createTempFile("images", "jpg");
+
+        storageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                // Local temp file has been created
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+            }
+        });
+
+    }*/
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
