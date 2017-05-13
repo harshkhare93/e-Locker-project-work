@@ -49,7 +49,7 @@ public class NewMessageNotification {
         final Bitmap picture = BitmapFactory.decodeResource(res, R.drawable.example_picture);
 
 
-        final String ticker = "time to add  daily expense";
+        final String ticker = "Time to renew Your Document";
         final String title = res.getString(R.string.new_message_notification_title_template, exampleString);
         final String text = res.getString( R.string.new_message_notification_placeholder_text_template, exampleString);
 

@@ -4,16 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/profilebg"
+    android:background="@drawable/wal"
     tools:context="harshkhare.e_locker.GetProfileInformationActivity">
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginTop="48dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="48dp"
+        android:background="@drawable/userprofile" />
 
     <TextView
         android:id="@+id/name"
@@ -23,7 +24,9 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:textAlignment="center"
-        android:textSize="20sp" />
+        android:textColor="@color/text"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/email"
@@ -34,17 +37,8 @@
         android:layout_marginTop="20dp"
         android:fontFamily="sans-serif"
         android:textAlignment="center"
-        android:textColor="#cb6716"
-        android:textSize="25sp" />
-
-    <ProgressBar
-        android:id="@+id/pbproimg"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/imageView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="49dp"
-        android:visibility="visible" />
+        android:textColor="@color/bg_screen2"
+        android:textSize="25sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>

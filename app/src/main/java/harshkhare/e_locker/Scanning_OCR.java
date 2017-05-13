@@ -254,7 +254,7 @@ public class Scanning_OCR extends AppCompatActivity {
                 if (detector.isOperational() && bitmap != null) {
                     Frame frame = new Frame.Builder().setBitmap(bitmap).build();
                     SparseArray<TextBlock> textBlocks = detector.detect(frame);
-                    String blocks = "";
+                    String blocks ="";
                     String lines = "";
                     String words = "";
                     ivScanDoc.setImageBitmap(bitmap);

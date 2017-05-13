@@ -8,11 +8,15 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="harshkhare.e_locker.HomeActivity"
     tools:showIn="@layout/app_bar_home">
-    <LinearLayout
+
+    <!--LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/container"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="148dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true">
 
         <FrameLayout
             android:id="@+id/content"
@@ -28,23 +32,55 @@
                 android:layout_marginTop="40sp"
                 android:scrollbars="vertical"
                 tools:listitem="@layout/user_document_detail" />
+
+
         </FrameLayout>
 
 
-    </LinearLayout>
+    </LinearLayout>-->
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvDescription"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="106dp"
+        android:scrollbars="vertical"
+        tools:listitem="@layout/user_document_detail"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabScandoc"
         android:layout_width="700dp"
         android:layout_height="700dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="29dp"
-        android:layout_marginEnd="42dp"
+        android:layout_marginBottom="22dp"
+        android:layout_marginEnd="24dp"
         android:clickable="true"
         app:backgroundTint="#c80a1d"
         app:fabSize="normal"
         app:srcCompat="@drawable/ic_menu_camera"
         tools:layout_editor_absoluteX="326dp"
-        tools:layout_editor_absoluteY="535dp" />
+        tools:layout_editor_absoluteY="535dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
+
+    <android.support.v7.widget.SearchView
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="65dp" />
+
+    <ProgressBar
+        android:id="@+id/pbStatus"
+        style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="160dp"
+        android:layout_marginTop="300dp"
+        android:layout_gravity="center" />
+
 </RelativeLayout>

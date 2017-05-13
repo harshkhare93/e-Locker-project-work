@@ -35,14 +35,14 @@ public class Notificationsetting extends AppCompatActivity implements View.OnCli
 
         alarm = new AlarmReceiver();
         tvTimeOption = (TextView) findViewById(R.id.tvTimeOption);
-        switchTts = (Switch) findViewById(R.id.switchTts);
-        switchDaily = (Switch) findViewById(R.id.switchDaily);
+       // switchTts = (Switch) findViewById(R.id.switchTts);//not in use tody but work on future
+       // switchDaily = (Switch) findViewById(R.id.switchDaily); //not in use tody but work on future
         switchVibRing = (Switch) findViewById(R.id.switchVibRing);
         btnsave = (Button) findViewById(R.id.btnsave);
         btnsave.setOnClickListener(this);
         pref = getSharedPreferences(Constants.SETTING_PREF, MODE_PRIVATE);
         updateUI();
-
+/*
         switchTts.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -60,7 +60,7 @@ public class Notificationsetting extends AppCompatActivity implements View.OnCli
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 pref.edit().putBoolean(Constants.KEY_VIB_RING, isChecked).apply();
             }
-        });
+        });*/
         tvTimeOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,7 +70,7 @@ public class Notificationsetting extends AppCompatActivity implements View.OnCli
         btnsave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(Notificationsetting.this, "Long press to clear app database", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Notificationsetting.this, "Long press to Add Notification to your Document", Toast.LENGTH_SHORT).show();
             }
         });
         btnsave.setOnLongClickListener(new View.OnLongClickListener() {
@@ -105,8 +105,8 @@ public class Notificationsetting extends AppCompatActivity implements View.OnCli
     }
 
     private void updateUI() {
-        switchTts.setChecked(pref.getBoolean(Constants.KEY_TTS, false));
-        switchDaily.setChecked(pref.getBoolean(Constants.KEY_DAILY_NOTIF, false));
+//        switchTts.setChecked(pref.getBoolean(Constants.KEY_TTS, false));
+//        switchDaily.setChecked(pref.getBoolean(Constants.KEY_DAILY_NOTIF, false));
         switchVibRing.setChecked(pref.getBoolean(Constants.KEY_VIB_RING, false));
         int hour = pref.getInt(Constants.KEY_HOUR, 0);
         int minute = pref.getInt(Constants.KEY_MINUTE, 0);

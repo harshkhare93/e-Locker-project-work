@@ -49,6 +49,7 @@
     </string>
     <string name="action_open">open</string>
     <string name="title_activity_document_desc">Document Description</string>
+    <string name="invitation_deep_link" />
 
 
 </resources>

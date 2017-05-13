@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
-
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -17,6 +16,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -26,7 +26,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
@@ -42,20 +41,19 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static harshkhare.e_locker.R.id.ivDoc;
 import static harshkhare.e_locker.R.id.nav_logout;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
     public static final String TAG = "App Sharing";
     public static final int REQUEST_INVITE = 232;
+
     private MenuItem logout;
     private FloatingActionButton fabscandoc;
     private GoogleApiClient mGoogleApiClient;
@@ -64,11 +62,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseDatabase db;
     private DatabaseReference myref;
     List<ScanModel> doumentList;
-    private ArrayList<Object> documentList;
+    public ArrayList<ScanModel> documentList;
     private RecyclerView rvDesc;
     private ProgressBar pb;
     private View headerView;
-
+    private SearchView search;
+    private ArrayList<ScanModel> searchList;
+    private ProgressBar pbStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +84,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         logout = (MenuItem) findViewById(R.id.nav_logout);
+        search = (SearchView) findViewById(R.id.search);
+        pbStatus = (ProgressBar) findViewById(R.id.pbStatus);
+        searchList = new ArrayList<>();
         fabscandoc = (FloatingActionButton) findViewById(R.id.fabScandoc);
         headerView = navigationView.getHeaderView(0);//header view object for getting image on nav_bar
         updateui(headerView);
@@ -102,6 +105,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         };
         initGoogleApi();
+        //Code for App Invitation
+
 
 
         //Recycler View Code
@@ -121,6 +126,37 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         rvDescription.setLayoutManager(manager);
         //setup Listener
         //using anonymous class
+        loadDocumentData(rvDescription);
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchList.clear();
+                for (ScanModel scan : documentList) {
+                    String desc = scan.getDescription().toLowerCase();
+                    String searchString = query.toLowerCase();
+                    if (searchString.contains(desc)) {
+                        searchList.add(scan);
+                    }
+                }
+                rvDescription.setAdapter(new DocumentAdapter(searchList));
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        search.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                loadDocumentData(rvDescription);
+                return true;
+            }
+        });
+    }
+
+    private void loadDocumentData(final RecyclerView rvDescription){
         myref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -130,6 +166,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     //here write datasnapshot.children().{then write iterator and chose for loop then next line automaticaaly genrated}
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         documentList.add(new ScanModel(snapshot));
+
                     }
                     Toast.makeText(HomeActivity.this, "Data loaded Successfully", Toast.LENGTH_SHORT).show();
 
@@ -140,7 +177,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     Toast.makeText(HomeActivity.this, "Data not Available", Toast.LENGTH_SHORT).show();
                 }
 
-
+                pbStatus.setVisibility(View.GONE);
 
             }
 
@@ -231,7 +268,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_share:
                 //// TODO: shareApp
-                sendInvitation();
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                share.putExtra(Intent.EXTRA_SUBJECT, "e-Locker");
+
+                share.putExtra(Intent.EXTRA_TEXT, "Your friend has invited you to join the app./n To join click the link");
+                startActivity(Intent.createChooser(share, "Share via..."));
                 return true;
 
 
@@ -241,7 +283,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 emailIntent.setType("text/plain");*/
                 Intent i = new Intent(Intent.ACTION_SEND);
                 i.setType("message/rfc822");
-                i.putExtra(Intent.EXTRA_EMAIL, new String[]{"harshkhare93@gmail.com"});
+                i.putExtra(Intent.EXTRA_EMAIL, new String[]{"android.support.e-Locker@gmail.com"});
                 i.putExtra(Intent.EXTRA_SUBJECT, "subject of email");
                 i.putExtra(Intent.EXTRA_TEXT, "body of email");
                 try {
@@ -257,9 +299,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(feedbackrate);
                 break;
 
-            case R.id.action_settings:
-                //// TODO: Reminder settings
-
+            case R.id.nav_invite:
+                //// TODO: App Invitatation
+                onInviteClicked();
 
                 break;
 
@@ -289,20 +331,23 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Intent i = new Intent(this, Scanning_OCR.class);
         startActivity(i);
     }
-
-    //App Sharing Code Methods
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.d(TAG, "onConnectionFailed:" + connectionResult);
-    }
-
-    private void sendInvitation() {
+    //-------------------App Invitation Code--------------------
+    private void onInviteClicked() {
         Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
                 .setMessage(getString(R.string.invitation_message))
+                .setDeepLink(Uri.parse(getString(R.string.invitation_deep_link)))
                 .setCallToActionText(getString(R.string.invitation_cta))
                 .build();
         startActivityForResult(intent, REQUEST_INVITE);
     }
+
+
+     @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d(TAG, "onConnectionFailed:" + connectionResult);
+    }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -324,7 +369,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private void updateui(View headerView) {
         ImageView imageView = (ImageView) headerView.findViewById(R.id.imageView);
         TextView name = (TextView) headerView.findViewById(R.id.name);
-        TextView email = (TextView) headerView.findViewById(R.id.email);
+        TextView email = (TextView) headerView.findViewById(R.id.name);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String username = user.getDisplayName();
         String email1 = user.getEmail();
@@ -341,8 +386,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         public Bitmap transform(Bitmap source) {
             int size = Math.min(source.getWidth(), source.getHeight());
 
-            int x = (source.getWidth() - size) / 2;
-            int y = (source.getHeight() - size) / 2;
+            int x = (source.getWidth() - size) / 5;
+            int y = (source.getHeight() - size) / 5;
 
             Bitmap squaredBitmap = Bitmap.createBitmap(source, x, y, size, size);
             if (squaredBitmap != source) {

@@ -28,6 +28,10 @@
                 android:icon="@drawable/ic_menu_share"
                 android:title="Share App" />
             <item
+                android:id="@+id/nav_invite"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Invite" />
+            <item
                 android:id="@+id/nav_feed_rate"
 
                 android:icon="@drawable/ic_create_black_24dp"

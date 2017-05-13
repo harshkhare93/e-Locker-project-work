@@ -2,6 +2,7 @@ package harshkhare.e_locker;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -31,9 +32,10 @@ import static harshkhare.e_locker.R.id.ivDoc;
 import static harshkhare.e_locker.R.id.ivScanDoc;
 
 public class DocumentAdapter extends RecyclerView.Adapter<DocumentHolder> {
-    ArrayList<Object> documentList;
+    ArrayList<ScanModel> documentList;
+    ArrayList<ScanModel>document;
 
-    public DocumentAdapter(ArrayList<Object> documentList) {
+    public DocumentAdapter(ArrayList<ScanModel> documentList) {
         this.documentList = documentList;
     }
 
@@ -42,7 +44,6 @@ public class DocumentAdapter extends RecyclerView.Adapter<DocumentHolder> {
         View row = ((LayoutInflater) parent.getContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                 .inflate(R.layout.user_document_detail, parent, false);
-
         return new DocumentHolder(row);
 
 
@@ -52,15 +53,13 @@ public class DocumentAdapter extends RecyclerView.Adapter<DocumentHolder> {
     public void onBindViewHolder(final DocumentHolder holder, int position) {
         //databinding
 
-        ScanModel model = (ScanModel) documentList.get(position);
+        final ScanModel model = (ScanModel) documentList.get(position);
         holder.tvdesc.setText(model.description);
         holder.tvDate.setText(String.valueOf(model.getUploaded_on()));
-
+        holder.pbsubstatus.setVisibility(View.VISIBLE);
 
         Glide.with(holder.ivDoc.getContext())
                 .load(model.getUrl())
-                // .resize(400,300)
-                // .onlyScaleDown()
                 .placeholder(R.drawable.bg2)
                 .into(holder.ivDoc);
 
@@ -69,49 +68,13 @@ public class DocumentAdapter extends RecyclerView.Adapter<DocumentHolder> {
             public void onClick(View v) {
                 Context context = v.getContext();
                 Intent intent = new Intent(context, Document_desc.class);
+                intent.putExtra("EXTRA_URL",model.url);
+                intent.putExtra("EXTRA_KEY",model.getKey());
                 context.startActivity(intent);
             }
         });
-        //------------- Downloading ------------------
-        //download on local file
-        holder.ivdownload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Context context = v.getContext();
-                Toast.makeText(context, "download", Toast.LENGTH_SHORT).show();
-
-
-                File localFile = null;
-                try {
-                    localFile = File.createTempFile("images", "jpg");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                holder.strref.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        // Local temp file has been created
-
-                        /* Load the image using Glide
-                                 Glide.with(this)
-                                .using(new FirebaseImageLoader())
-                                .load()
-                                .into(imageView);*/
-
-
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle any errors
-                    }
-                });
-            }
-        });
-
+        holder.pbsubstatus.setVisibility(View.INVISIBLE);
     }
-
     @Override
     public int getItemCount() {
         return documentList.size();

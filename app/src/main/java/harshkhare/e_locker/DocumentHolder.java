@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -20,9 +21,8 @@ public class DocumentHolder extends RecyclerView.ViewHolder {
     public ImageView ivDoc;
     TextView tvdesc;
     TextView tvDate;
-    public ImageView ivdownload;
-    public FirebaseStorage mstorage;
-    public StorageReference strref;
+    public  ProgressBar pbsubstatus;
+
 
 
     public DocumentHolder(View itemView) {
@@ -30,9 +30,7 @@ public class DocumentHolder extends RecyclerView.ViewHolder {
         tvdesc = (TextView) itemView.findViewById(R.id.tvdesc);
         ivDoc = (ImageView) itemView.findViewById(R.id.ivDoc);
         tvDate = (TextView) itemView.findViewById(R.id.tvDate);
-        ivdownload = (ImageView) itemView.findViewById(R.id.ivdownload);
-        mstorage = FirebaseStorage.getInstance();
-        strref = mstorage.getReferenceFromUrl("https://firebasestorage.googleapis.com/");
+        pbsubstatus=(ProgressBar) itemView.findViewById(R.id.pbsubstatus);
 
     }
 

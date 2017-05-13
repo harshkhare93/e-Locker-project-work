@@ -13,7 +13,7 @@
 
     <!-- Screens background color-->
     <color name="bg_screen1">#b92f4e</color>
-    <color name="bg_screen2">#20d2bb</color>
+    <color name="bg_screen2">#0b8777</color>
     <color name="bg_screen3">#3395ff</color>
     <color name="bg_screen4">#c873f4</color>
 
@@ -28,8 +28,10 @@
     <color name="dot_light_screen2">#8cf9eb</color>
     <color name="dot_light_screen3">#93c6fd</color>
     <color name="dot_light_screen4">#e4b5fc</color>
-    <color name="white">#fff</color>
+    <color name="white">#e8f9f1f3</color>
     <color name="teal500">#89fd9a</color>
+    <color name="reeeeeeeeee">#ed4b4b</color>
+    <color name="text">#ffffff</color>
 
     <array name="array_dot_active">
         <item>@color/dot_light_screen1</item>
