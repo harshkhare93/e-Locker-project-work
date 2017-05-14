@@ -68,8 +68,9 @@ public class DocumentAdapter extends RecyclerView.Adapter<DocumentHolder> {
             public void onClick(View v) {
                 Context context = v.getContext();
                 Intent intent = new Intent(context, Document_desc.class);
-                intent.putExtra("EXTRA_URL",model.url);
+                intent.putExtra("EXTRA_URL",model.getUrl());
                 intent.putExtra("EXTRA_KEY",model.getKey());
+                intent.putExtra("EXTRA_DESCRIPTION",model.getDescription());
                 context.startActivity(intent);
             }
         });

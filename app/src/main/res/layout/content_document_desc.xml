@@ -22,13 +22,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginLeft="@dimen/_6sdp"
+                android:layout_toLeftOf="@+id/ivbtndownload"
                 android:text="TextView"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_alignParentTop="true" />
 
             <ImageButton
-                android:id="@+id/ivbtndownload"
+                android:id="@id/ivbtndownload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
