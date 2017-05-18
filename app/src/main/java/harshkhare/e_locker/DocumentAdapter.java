@@ -54,7 +54,7 @@ public class DocumentAdapter extends RecyclerView.Adapter<DocumentHolder> {
         //databinding
 
         final ScanModel model = (ScanModel) documentList.get(position);
-        holder.tvdesc.setText(model.description);
+     //   holder.tvdesc.setText(model.description);
         holder.tvDate.setText(String.valueOf(model.getUploaded_on()));
         holder.pbsubstatus.setVisibility(View.VISIBLE);
 

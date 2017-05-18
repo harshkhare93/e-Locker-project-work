@@ -74,7 +74,7 @@
         <activity
             android:name=".Document_desc"
             android:label="Document Description"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <service
             android:name="com.example.app.MyIntentService">
         </service>

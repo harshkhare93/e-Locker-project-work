@@ -369,7 +369,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private void updateui(View headerView) {
         ImageView imageView = (ImageView) headerView.findViewById(R.id.imageView);
         TextView name = (TextView) headerView.findViewById(R.id.name);
-        TextView email = (TextView) headerView.findViewById(R.id.name);
+        TextView email = (TextView) headerView.findViewById(R.id.email);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String username = user.getDisplayName();
         String email1 = user.getEmail();

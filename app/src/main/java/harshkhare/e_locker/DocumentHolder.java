@@ -19,7 +19,7 @@ import com.google.firebase.storage.StorageReference;
 public class DocumentHolder extends RecyclerView.ViewHolder {
 
     public ImageView ivDoc;
-    TextView tvdesc;
+    //TextView tvdesc;
     TextView tvDate;
     public  ProgressBar pbsubstatus;
 
@@ -27,7 +27,7 @@ public class DocumentHolder extends RecyclerView.ViewHolder {
 
     public DocumentHolder(View itemView) {
         super(itemView);
-        tvdesc = (TextView) itemView.findViewById(R.id.tvdesc);
+      //  tvdesc = (TextView) itemView.findViewById(R.id.tvdesc);
         ivDoc = (ImageView) itemView.findViewById(R.id.ivDoc);
         tvDate = (TextView) itemView.findViewById(R.id.tvDate);
         pbsubstatus=(ProgressBar) itemView.findViewById(R.id.pbsubstatus);

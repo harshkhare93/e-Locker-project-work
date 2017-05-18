@@ -75,25 +75,7 @@ public class Document_desc extends AppCompatActivity implements View.OnClickList
 
 
         Log.d("file-url", url);
-        /*
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    document.add(new ScanModel(snapshot));
-                }
-                Toast.makeText(Document_desc.this, "Data loaded Successfully", Toast.LENGTH_SHORT).show();
-
-                DocumentAdapter adapter=new DocumentAdapter(document);
-                rvDescription.setAdapter(adapter);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
-    }
+       }
 
     @Override
     public void onClick(View v) {

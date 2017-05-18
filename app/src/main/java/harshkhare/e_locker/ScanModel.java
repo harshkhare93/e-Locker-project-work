@@ -23,7 +23,7 @@ class ScanModel {
         this.description = dataSnapshot.child("desc").getValue(String.class);
         this.url = dataSnapshot.child("url").getValue(String.class);
         this.userid = dataSnapshot.child("userid").getValue(String.class);
-        this.Document=dataSnapshot.child("desc").getValue(String.class);
+      //  this.Document=dataSnapshot.child("desc").getValue(String.class);
         key = dataSnapshot.getKey();
         uploaded_on = dataSnapshot.child("uploaded_on").getValue(Long.class);
         this.document=dataSnapshot.child("desc").getValue(String.class);

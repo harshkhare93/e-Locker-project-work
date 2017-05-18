@@ -83,7 +83,6 @@ public class Scanning_OCR extends AppCompatActivity {
         setContentView(R.layout.activity_scanning__ocr);
         Button btnUpload = (Button) findViewById(R.id.btnUpload);
         Button btnScan = (Button) findViewById(R.id.btnScan);
-       // downloadimage = (ImageView) findViewById(R.id.ivdownload);
         ivScanDoc = (ImageView) findViewById(R.id.ivScanDoc);
         etscanResults = (EditText) findViewById(R.id.etscanResults);
         storage = FirebaseStorage.getInstance();
@@ -115,17 +114,6 @@ public class Scanning_OCR extends AppCompatActivity {
                 uploadToFirebase(v);
             }
         });
-        /*downloadimage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    downloadfromFirebase(view);
-                } catch (IOException e) {
-
-
-                }
-            }
-        });*/
         databaseReference = db.getReference("docs_db");
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         uid = currentUser.getUid();
@@ -196,27 +184,6 @@ public class Scanning_OCR extends AppCompatActivity {
             }
         });
     }
-    /*------------------Downloading data from database-----------------------
-    private void downloadfromFirebase(final View v) throws IOException {
-        v.setEnabled(false);
-        File localFile = File.createTempFile("images", "jpg");
-
-        storageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                // Local temp file has been created
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-            }
-        });
-
-    }*/
-
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

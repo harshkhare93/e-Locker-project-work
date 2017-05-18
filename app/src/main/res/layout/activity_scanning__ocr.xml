@@ -72,12 +72,12 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:orientation="vertical"
+            android:weightSum="1"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/name"
             tools:layout_constraintLeft_creator="1"
-            tools:layout_constraintRight_creator="1"
-            android:weightSum="1">
+            tools:layout_constraintRight_creator="1">
 
             <EditText
                 android:id="@+id/etscanResults"
@@ -87,15 +87,15 @@
                 android:layout_marginTop="8dp"
                 android:layout_weight="18.54"
 
-                android:inputType="textCapSentences|textMultiLine"
-                android:maxLength="2000"
-                android:maxLines="100"
-
                 android:background="#0000"
                 android:ems="10"
                 android:fontFamily="sans-serif-condensed"
-                android:hint="Edit Details Here for  document"
 
+                android:hint="Edit Details Here for  document"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLength="2000"
+                android:maxLines="100"
+                android:textAlignment="center"
 
                 android:padding="16dp"
                 android:textSize="24sp"
@@ -110,17 +110,17 @@
             android:id="@+id/btnScan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:fontFamily="sans-serif"
             android:text="Scan"
             android:textAllCaps="false"
             android:textStyle="bold"
-            android:layout_marginRight="8dp"
-            app:layout_constraintRight_toRightOf="@+id/btnUpload"
-            app:layout_constraintLeft_toLeftOf="@+id/btnUpload"
+            app:layout_constraintBottom_toTopOf="@+id/btnUpload"
             app:layout_constraintHorizontal_bias="0.0"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/btnUpload" />
+            app:layout_constraintLeft_toLeftOf="@+id/btnUpload"
+            app:layout_constraintRight_toRightOf="@+id/btnUpload" />
 
         <ProgressBar
             android:id="@+id/pbStatus"
@@ -128,10 +128,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            tools:layout_constraintBottom_creator="1"
+            android:layout_marginStart="16dp"
             app:layout_constraintBottom_toTopOf="@+id/tvUploadStatus"
-            android:layout_marginStart="16dp" />
+            app:layout_constraintLeft_toLeftOf="parent"
+            tools:layout_constraintBottom_creator="1" />
 
         <TextView
             android:id="@+id/tvUploadStatus"

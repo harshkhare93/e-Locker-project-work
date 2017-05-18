@@ -25,7 +25,7 @@
             android:adjustViewBounds="true"
             app:srcCompat="@drawable/aboutbg" />
 
-        <TextView
+        <!--TextView
             android:id="@+id/tvdesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
             android:text="TextView"
             android:textColor="@color/bg_screen1"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold" /-->
 
         <TextView
             android:id="@+id/tvDate"
